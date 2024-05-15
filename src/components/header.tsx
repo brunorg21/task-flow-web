@@ -44,7 +44,7 @@ export function Header() {
         </Button>
       </div>
 
-      <Button variant={"outline"}>Entrar</Button>
+      <Button variant={"outline"}>Sair</Button>
     </div>
   );
 }
