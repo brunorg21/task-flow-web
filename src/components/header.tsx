@@ -7,44 +7,34 @@ import {
   Workflow,
 } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { AccountMenu } from "./account-menu";
+import { ThemeToggle } from "./theme-toggle";
+import { Nav } from "./nav";
 
 export function Header() {
   return (
-    <div className="flex items-center justify-between space-x-4 bg-secondary-foreground p-4">
-      <span className="flex items-center text-primary-foreground gap-2 text-lg font-bold">
+    <div className="flex items-center justify-between space-x-4 bg-primary-foreground p-4">
+      <span className="flex items-center gap-2 text-lg font-bold">
         <Workflow size={30} /> task.flow
       </span>
 
       <Separator orientation="vertical" className="h-6" />
       <div className="flex gap-4 items-center w-full">
-        <Button variant={"ghost"} asChild>
-          <Link
-            className="flex gap-2 text-primary-foreground text-lg"
-            href={""}
-          >
-            <LayoutDashboard /> Dashboard
-          </Link>
-        </Button>
-        <Button variant={"ghost"} asChild>
-          <Link
-            className="flex gap-2 text-primary-foreground text-lg"
-            href={""}
-          >
-            <SquareKanban /> Boards
-          </Link>
-        </Button>
+        <Nav to="/taskflow/dashboard">
+          <LayoutDashboard /> Dashboard
+        </Nav>
 
-        <Button variant={"ghost"} asChild>
-          <Link
-            className="flex gap-2 text-primary-foreground text-lg"
-            href={""}
-          >
-            <Building2 /> Organizações
-          </Link>
-        </Button>
+        <Nav to="/taskflow/boards">
+          <SquareKanban /> Boards
+        </Nav>
+
+        <Nav to="/taskflow/organizations">
+          <Building2 /> Organizações
+        </Nav>
       </div>
 
-      <Button variant={"outline"}>Sair</Button>
+      <AccountMenu />
+      <ThemeToggle />
     </div>
   );
 }
