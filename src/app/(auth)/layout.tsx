@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Auth({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen w-full justify-between">
-      <div className="w-[900px] flex flex-col justify-between p-4 bg-muted-foreground text-secondary">
+      <div className="w-[900px] flex flex-col justify-between p-4 bg-primary-foreground">
         <div className="flex justify-between items-center">
           <h1 className="text-lg flex gap-4 items-center space-y-4">
             <Workflow className="h-6 w-6" /> task.flow
