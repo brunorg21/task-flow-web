@@ -19,7 +19,7 @@ export function Header() {
       </span>
 
       <Separator orientation="vertical" className="h-6" />
-      <div className="flex gap-4 items-center w-full">
+      <div className="hidden gap-4 items-center w-full md:flex">
         <Nav to="/taskflow/dashboard">
           <LayoutDashboard /> Dashboard
         </Nav>
