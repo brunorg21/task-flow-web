@@ -1,21 +1,17 @@
-import Link from "next/link";
-import { Button } from "./ui/button";
-import {
-  Building2,
-  LayoutDashboard,
-  SquareKanban,
-  Workflow,
-} from "lucide-react";
+import { Building2, LayoutDashboard, SquareKanban } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { AccountMenu } from "./account-menu";
 import { ThemeToggle } from "./theme-toggle";
 import { Nav } from "./nav";
 
+import { MenuNavigation } from "./menu-navigation";
+import Image from "next/image";
+
 export function Header() {
   return (
     <div className="flex items-center justify-between space-x-4 bg-primary-foreground p-4">
       <span className="flex items-center gap-2 text-lg font-bold">
-        <Workflow size={30} /> task.flow
+        <Image src={"/logo.png"} alt="" width={40} height={40} />
       </span>
 
       <Separator orientation="vertical" className="h-6" />
@@ -31,6 +27,9 @@ export function Header() {
         <Nav to="/taskflow/organizations">
           <Building2 /> Organizações
         </Nav>
+      </div>
+      <div className="md:hidden flex">
+        <MenuNavigation />
       </div>
 
       <AccountMenu />
