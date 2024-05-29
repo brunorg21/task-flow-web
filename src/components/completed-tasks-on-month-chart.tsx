@@ -8,6 +8,7 @@ import {
   LineChart,
 } from "recharts";
 import { blue } from "tailwindcss/colors";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function CompletedTasksOnMothChart() {
   const completedData = [
@@ -21,18 +22,37 @@ export function CompletedTasksOnMothChart() {
   ];
 
   return (
-    <ResponsiveContainer width="100%" height={240}>
-      <LineChart data={completedData} style={{ fontSize: 12 }}>
-        <XAxis dataKey={"date"} tickLine={false} axisLine={false} dy={16} />
-        <YAxis stroke="#888" axisLine={false} tickLine={false} width={80} />
-        <CartesianGrid vertical={false} className="stroke-muted" />
-        <Line
-          type="linear"
-          strokeWidth={2}
-          dataKey="quantity"
-          stroke={blue["500"]}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+    <Card className="col-span-6">
+      <CardHeader>
+        <CardTitle className="md:text-xl text-lg">
+          Tarefas completadas no mês
+        </CardTitle>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={240}>
+            <LineChart data={completedData} style={{ fontSize: 12 }}>
+              <XAxis
+                dataKey={"date"}
+                tickLine={false}
+                axisLine={false}
+                dy={16}
+              />
+              <YAxis
+                stroke="#888"
+                axisLine={false}
+                tickLine={false}
+                width={80}
+              />
+              <CartesianGrid vertical={false} className="stroke-muted" />
+              <Line
+                type="linear"
+                strokeWidth={2}
+                dataKey="quantity"
+                stroke={blue["500"]}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </CardHeader>
+    </Card>
   );
 }
