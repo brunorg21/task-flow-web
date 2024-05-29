@@ -12,11 +12,13 @@ interface NavProps {
 
 export function Nav({ children, to }: NavProps) {
   const pathname = usePathname();
-  console.log(pathname);
+
   return (
     <Button variant={"ghost"} asChild>
       <Link
-        className={`flex gap-2 text-lg ${pathname === to && "bg-secondary"}`}
+        className={`flex gap-2 text-lg ${
+          pathname.includes(to) && "bg-secondary"
+        }`}
         href={to}
       >
         {children}
