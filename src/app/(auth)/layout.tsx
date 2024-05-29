@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Workflow } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Auth({ children }: { children: React.ReactNode }) {
@@ -7,8 +8,8 @@ export default function Auth({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen w-full justify-between">
       <div className="w-[900px] flex flex-col justify-between p-4 bg-primary-foreground">
         <div className="flex justify-between items-center">
-          <h1 className="text-lg flex gap-4 items-center space-y-4">
-            <Workflow className="h-6 w-6" /> task.flow
+          <h1 className="text-lg flex gap-4 items-center space-y-4 font-bold text-md">
+            <Image src={"/logo.png"} alt="" width={40} height={40} /> task.flow
           </h1>
           <div className="flex space-x-4">
             <Button variant={"ghost"}>
