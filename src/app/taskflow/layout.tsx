@@ -7,7 +7,7 @@ export default function TaskFlowLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="max-h-full">
       <Header />
       <Separator />
       {children}
