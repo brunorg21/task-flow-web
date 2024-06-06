@@ -1,7 +1,9 @@
+import { OrganizationsTable } from "@/components/organizations-table";
+
 export default function Organizations() {
   return (
-    <div>
-      <h1>Organizações</h1>
+    <div className="overflow-hidden p-4">
+      <OrganizationsTable/>
     </div>
   );
 }
