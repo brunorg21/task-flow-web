@@ -1,4 +1,4 @@
-import { Building2, LayoutDashboard, SquareKanban } from "lucide-react";
+import { Building2, LayoutDashboard, LayoutList } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { AccountMenu } from "./account-menu";
 import { ThemeToggle } from "./theme-toggle";
@@ -10,7 +10,7 @@ import Image from "next/image";
 export function Header() {
   return (
     <div className="flex items-center justify-between space-x-4 bg-primary-foreground p-4">
-      <span className="flex items-center gap-2 text-lg font-bold">
+      <span className="flex items-center gap-2 text-lg">
         <Image src={"/logo.png"} alt="" width={40} height={40} />
       </span>
 
@@ -20,8 +20,8 @@ export function Header() {
           <LayoutDashboard /> Dashboard
         </Nav>
 
-        <Nav to="/taskflow/boards">
-          <SquareKanban /> Boards
+        <Nav to="/taskflow/tasks">
+          <LayoutList /> Tarefas
         </Nav>
 
         <Nav to="/taskflow/organizations">
