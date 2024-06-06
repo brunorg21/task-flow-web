@@ -14,10 +14,11 @@ export function Nav({ children, to }: NavProps) {
   const pathname = usePathname();
 
   return (
-    <Button variant={"ghost"} asChild>
+    <Button variant={"link"} asChild>
       <Link
-        className={`flex gap-2 text-lg ${
-          pathname.includes(to) && "bg-secondary"
+        className={`flex gap-2 text-lg font-normal ${
+          pathname.includes(to) &&
+          "text-primary-foreground bg-secondary-foreground"
         }`}
         href={to}
       >
