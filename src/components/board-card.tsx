@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export function BoardCard() {
   return (
-    <Link className="col-span-2" href={"/taskflow/boards"}>
+    <Link className="col-span-2" href={"/taskflow/tasks/user"}>
       <Card className="bg-primary-foreground md:hover:scale-105 hover:scale-[102%] duration-150">
         <CardHeader>
           <CardTitle className="text-lg">Gerencie suas tarefas</CardTitle>
