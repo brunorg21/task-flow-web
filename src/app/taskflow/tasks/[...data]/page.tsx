@@ -1,4 +1,11 @@
-import { TaskTable } from "@/components/task-table";
+import { TableList } from "@/components/table";
+
+import { Task } from "@/types/task";
+import { Building } from "lucide-react";
+import { BadgeStatus } from "./badge-status";
+import { EntityTable } from "@/types/entityTable";
+import { DetailsButton } from "@/components/details-button";
+import { TaskModal } from "@/components/task-modal/task-modal";
 
 interface BoardProps {
   params: {
@@ -9,16 +16,130 @@ interface BoardProps {
 export default function Board({ params }: BoardProps) {
   const [type, typeId] = params.data;
 
-  console.log({
-    type,
-    typeId,
-  });
+  const tasks: Task[] = [
+    {
+      id: "m5gr84i9",
+      assignedId: "1sasas",
+      createdAt: new Date(),
+      status: "Em andamento",
+      title: "Tarefa 1",
+    },
+    {
+      id: "3u1reuv4",
+      assignedId: "saioshao",
+      createdAt: new Date(),
+      status: "Cancelada",
+      title: "Tarefa 2",
+    },
+    {
+      id: "derv1ws0",
+      assignedId: "dubngvdfiogdf",
+      createdAt: new Date(),
+      status: "Concluída",
+      title: "Tarefa 3",
+    },
+    {
+      id: "5kma53ae",
+      assignedId: "gwspfomsdf",
+      createdAt: new Date(),
+      status: "Concluída",
+      title: "Tarefa 6",
+    },
+    {
+      id: "bhqecj4p",
+      assignedId: "asassa",
+      createdAt: new Date(),
+      status: "Em andamento",
+      title: "Tarefa 8",
+    },
+    {
+      id: "bhqecj4p",
+      assignedId: "asassa",
+      createdAt: new Date(),
+      status: "Em andamento",
+      title: "Tarefa 8",
+    },
+    {
+      id: "bhqecj4p",
+      assignedId: "asassa",
+      createdAt: new Date(),
+      status: "Em andamento",
+      title: "Tarefa 8",
+    },
+    {
+      id: "bhqecj4p",
+      assignedId: "asassa",
+      createdAt: new Date(),
+      status: "Em andamento",
+      title: "Tarefa 8",
+    },
+    {
+      id: "bhqecj4p",
+      assignedId: "asassa",
+      createdAt: new Date(),
+      status: "Em andamento",
+      title: "Tarefa 8",
+    },
+    {
+      id: "bhqecj4p",
+      assignedId: "asassa",
+      createdAt: new Date(),
+      status: "Em andamento",
+      title: "Tarefa 8",
+    },
+  ];
+
+  const headCells = [
+    {
+      label: "Título",
+      customStyle: "w-[350px]",
+    },
+    {
+      label: "Status",
+    },
+    {
+      label: "Responsável",
+    },
+    {
+      label: "Data de criação",
+    },
+    {
+      label: "",
+    },
+  ];
+
+  function createTable(task: Task) {
+    return {
+      id: task.id,
+      contents: [
+        {
+          value: task.title,
+        },
+        {
+          value: <BadgeStatus task={task} />,
+        },
+        {
+          value: task.assignedId,
+        },
+        {
+          value: task.createdAt.toString(),
+        },
+        {
+          value: <DetailsButton modal={<TaskModal />} />,
+        },
+      ],
+    } as EntityTable;
+  }
+
+  const rows = tasks.map((task) => createTable(task));
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <h1 className="text-2xl font-bold">Organização 1</h1>
-
-      <TaskTable />
+      <h1 className="flex gap-2 items-center text-2xl font-bold">
+        <Building className="w-7 h-7" />
+        Organização 1
+      </h1>
+      <TableList entities={rows} headCells={headCells} />
     </div>
   );
 }
