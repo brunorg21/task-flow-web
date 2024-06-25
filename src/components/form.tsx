@@ -18,9 +18,15 @@ interface FormProps {
   formSchema: ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
   handleSubmitForm: (event: any) => void;
   inputs: FormSchema[];
+  isEditing?: boolean;
 }
 
-export function Form({ formSchema, handleSubmitForm, inputs }: FormProps) {
+export function Form({
+  formSchema,
+  handleSubmitForm,
+  inputs,
+  isEditing,
+}: FormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -31,26 +37,32 @@ export function Form({ formSchema, handleSubmitForm, inputs }: FormProps) {
         onSubmit={form.handleSubmit(handleSubmitForm)}
         className="grid grid-cols-12 gap-2"
       >
-        {inputs.map((input) => (
-          <FormField
-            key={input.name}
-            control={form.control}
-            name={input.name as never}
-            render={({ field }) => (
-              <FormItem className={`col-span-${input.size}`}>
-                <FormLabel>{input.label}</FormLabel>
-                <FormControl>
-                  <Input placeholder={input.placeholder} {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
-        <Button type="submit">Salvar</Button>
+        {inputs.map((input) => {
+          if (input.hidden) {
+            return null;
+          }
+
+          return (
+            <FormField
+              key={input.name}
+              control={form.control}
+              name={input.name as never}
+              render={({ field }) => (
+                <FormItem className={`col-span-${input.size}`}>
+                  <FormLabel>{input.label}</FormLabel>
+                  <FormControl>
+                    <Input {...input} {...field} />
+                  </FormControl>
+                  <FormDescription>{input.description ?? ""}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          );
+        })}
+        <Button className="mt-8" type="submit">
+          {isEditing ? "Salvar" : "Criar"}
+        </Button>
       </form>
     </FormContainer>
   );
