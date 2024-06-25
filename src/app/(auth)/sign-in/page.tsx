@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+"use client";
+
+import SignInForm from "./sign-in-form";
 
 export default function SignIn() {
   return (
@@ -10,23 +10,7 @@ export default function SignIn() {
           Acesse sua conta
           <p className="text-sm font-normal mt-2">Acompanhe suas tarefas</p>
         </div>
-
-        <form className="flex flex-col space-y-4" action="">
-          <Input placeholder="Email" />
-          <Input placeholder="Senha" />
-          <div className="flex justify-between">
-            <Button variant={"default"}>Entrar</Button>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="remember username" />
-              <label
-                htmlFor="remember username"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Lembrar usuário?
-              </label>
-            </div>
-          </div>
-        </form>
+        <SignInForm />
       </div>
     </div>
   );
