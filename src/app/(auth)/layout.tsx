@@ -12,7 +12,7 @@ export default function Auth({ children }: { children: React.ReactNode }) {
             <Image src={"/logo.png"} alt="" width={40} height={40} /> task.flow
           </h1>
           <div className="flex space-x-4">
-            <Button variant={"ghost"}>
+            <Button asChild variant={"ghost"}>
               <Link
                 className="flex gap-2 items-center"
                 href={"https://github.com/brunorg21"}
@@ -21,7 +21,7 @@ export default function Auth({ children }: { children: React.ReactNode }) {
                 <Github /> Github
               </Link>
             </Button>
-            <Button variant={"ghost"}>
+            <Button asChild variant={"ghost"}>
               <Link
                 className="flex gap-2 items-center "
                 href={"https://github.com/brunorg21"}
