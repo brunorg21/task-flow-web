@@ -35,7 +35,7 @@ export const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const pathname = usePathname();
+
   const router = useRouter();
   const { toast } = useToast();
 
@@ -49,8 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           Authorization: "Bearer " + token,
         },
       });
-
-      console.log(response);
 
       const data = await response.json();
 
@@ -87,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setUser(user);
     setCookie(null, "@token", token, {
-      maxAge: 60 * 60 * 1,
+      maxAge: 60 * 60 * 1 * 24,
     });
     router.push("/taskflow/tasks");
   }
