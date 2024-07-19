@@ -70,6 +70,7 @@ export default function Organizations() {
     },
     {
       label: "",
+      customStyle: "w-[30px]",
     },
   ];
   function createTable(org: Organization) {
