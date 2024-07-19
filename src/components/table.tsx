@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -10,6 +12,7 @@ import {
 import { TablePagination } from "./table-pagination";
 import { HeadCells } from "@/types/headCells";
 import { EntityTable } from "@/types/entityTable";
+import { useState } from "react";
 
 interface TableListProps {
   headCells: HeadCells[];
@@ -17,6 +20,8 @@ interface TableListProps {
 }
 
 export function TableList({ headCells, entities }: TableListProps) {
+  const [rows, setRows] = useState<EntityTable[]>(entities);
+
   return (
     <div className="border rounded-md w-full">
       <Table>
@@ -32,7 +37,7 @@ export function TableList({ headCells, entities }: TableListProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {entities.map((row) => (
+          {rows.map((row) => (
             <TableRow key={row.id}>
               {row.contents.map((content, index) => (
                 <TableCell key={index}>{content.value}</TableCell>
@@ -42,7 +47,7 @@ export function TableList({ headCells, entities }: TableListProps) {
         </TableBody>
       </Table>
       <div className="w-full flex items-end justify-end p-1">
-        <TablePagination data={entities} />
+        <TablePagination setRows={setRows} itemsPerPage={12} data={entities} />
       </div>
     </div>
   );
