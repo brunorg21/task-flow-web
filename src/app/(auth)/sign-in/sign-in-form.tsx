@@ -5,7 +5,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/providers/auth-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Error from "next/error";
+import { Circle, LoaderCircle } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -23,8 +24,12 @@ export default function SignInForm() {
     resolver: zodResolver(signInFormSchema),
   });
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   async function handleSignIn({ email, password }: SignInFormType) {
+    setLoading(true);
     await signIn({ email, password });
+    setLoading(false);
   }
   return (
     <form
@@ -55,8 +60,14 @@ export default function SignInForm() {
         </span>
       )}
       <div className="flex justify-between">
-        <Button type="submit" variant={"default"}>
-          Entrar
+        <Button disabled={loading} type="submit" variant={"default"}>
+          {loading ? (
+            <span className="flex items-center gap-1">
+              <LoaderCircle className="animate-spin" /> Entrar
+            </span>
+          ) : (
+            "Entrar"
+          )}
         </Button>
         <div className="flex items-center space-x-2">
           <Checkbox id="remember username" />
