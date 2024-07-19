@@ -8,6 +8,9 @@ import { DetailsButton } from "@/components/details-button";
 import { TaskModal } from "@/components/task-modal/task-modal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { api } from "@/lib/api";
+import { cookies } from "next/headers";
+import { format } from "date-fns";
 
 interface BoardProps {
   params: {
@@ -15,81 +18,33 @@ interface BoardProps {
   };
 }
 
-export default function Board({ params }: BoardProps) {
+export async function getTasksByUser(token: string) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  const response = await api("/tasks/user", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const { tasks }: { tasks: Task[] } = await response.json();
+
+  return tasks;
+}
+
+export default async function Board({ params }: BoardProps) {
+  const token = cookies().get("@token")?.value;
   const [type, typeId] = params.data;
 
-  const tasks: Task[] = [
-    {
-      id: "m5gr84i9",
-      assignedId: "1sasas",
-      createdAt: new Date(),
-      status: "Em andamento",
-      title: "Tarefa 1",
-    },
-    {
-      id: "3u1reuv4",
-      assignedId: "saioshao",
-      createdAt: new Date(),
-      status: "Cancelada",
-      title: "Tarefa 2",
-    },
-    {
-      id: "derv1ws0",
-      assignedId: "dubngvdfiogdf",
-      createdAt: new Date(),
-      status: "Concluída",
-      title: "Tarefa 3",
-    },
-    {
-      id: "5kma53ae",
-      assignedId: "gwspfomsdf",
-      createdAt: new Date(),
-      status: "Concluída",
-      title: "Tarefa 6",
-    },
-    {
-      id: "bhqecj4p",
-      assignedId: "asassa",
-      createdAt: new Date(),
-      status: "Em andamento",
-      title: "Tarefa 8",
-    },
-    {
-      id: "bhqecj4p",
-      assignedId: "asassa",
-      createdAt: new Date(),
-      status: "Em andamento",
-      title: "Tarefa 8",
-    },
-    {
-      id: "bhqecj4p",
-      assignedId: "asassa",
-      createdAt: new Date(),
-      status: "Em andamento",
-      title: "Tarefa 8",
-    },
-    {
-      id: "bhqecj4p",
-      assignedId: "asassa",
-      createdAt: new Date(),
-      status: "Em andamento",
-      title: "Tarefa 8",
-    },
-    {
-      id: "bhqecj4p",
-      assignedId: "asassa",
-      createdAt: new Date(),
-      status: "Em andamento",
-      title: "Tarefa 8",
-    },
-    {
-      id: "bhqecj4p",
-      assignedId: "asassa",
-      createdAt: new Date(),
-      status: "Em andamento",
-      title: "Tarefa 8",
-    },
-  ];
+  const tasks = await getTasksByUser(token!);
+
+  console.log(tasks);
+
+  console.log({
+    type,
+    typeId,
+  });
 
   const headCells = [
     {
@@ -121,10 +76,10 @@ export default function Board({ params }: BoardProps) {
           value: <BadgeStatus task={task} />,
         },
         {
-          value: task.assignedId,
+          value: task.assignUser ?? "N/A",
         },
         {
-          value: task.createdAt.toString(),
+          value: format(task.createdAt, "dd/MM/yyyy"),
         },
         {
           value: <DetailsButton modal={<TaskModal task={task} isEditing />} />,
