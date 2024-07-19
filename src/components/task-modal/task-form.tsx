@@ -10,17 +10,18 @@ interface TaskFormProps {
   isEditing?: boolean;
 }
 
-export function TaskForm({ task, isEditing }: TaskFormProps) {
-  console.log(task);
-  const formSchema = z.object({
-    title: z.string(),
-    responsible: z.string(),
-    status: z.enum(["Em andamento", "Cancelada", "Concluída"], {
-      message: "Insira um valor válido.",
-    }),
-    date: z.string(),
-  });
+const taskFormSchema = z.object({
+  title: z.string(),
+  responsible: z.string(),
+  status: z.enum(["Em andamento", "Cancelada", "Concluída"], {
+    message: "Insira um valor válido.",
+  }),
+  date: z.string(),
+});
 
+type TaskFormSchema = z.infer<typeof taskFormSchema>;
+
+export function TaskForm({ task, isEditing }: TaskFormProps) {
   function handleSubmitForm(data: any) {
     console.log(data);
   }
@@ -67,7 +68,7 @@ export function TaskForm({ task, isEditing }: TaskFormProps) {
     <Form
       handleSubmitForm={handleSubmitForm}
       inputs={formInputs}
-      formSchema={formSchema}
+      formSchema={taskFormSchema}
       isEditing={isEditing}
     />
   );
