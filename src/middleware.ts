@@ -7,6 +7,7 @@ export default function middleware(
   const token = request.cookies.get("@token")?.value;
 
   const signURL = new URL("/sign-in", request.url);
+  const defaultURL = new URL("/taskflow/tasks", request.url);
 
   if (!token) {
     if (
@@ -15,7 +16,15 @@ export default function middleware(
     ) {
       return NextResponse.next();
     }
+
     return NextResponse.redirect(signURL);
+  }
+
+  if (
+    request.nextUrl.pathname === "/sign-in" ||
+    request.nextUrl.pathname === "/sign-up"
+  ) {
+    return NextResponse.redirect(defaultURL);
   }
 }
 
