@@ -1,6 +1,6 @@
 "use client";
 
-import { Ellipsis, Eye } from "lucide-react";
+import { Ellipsis, Eye, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,14 +9,15 @@ import {
 } from "./ui/dropdown-menu";
 import { Dialog } from "./ui/dialog";
 
-import { Button } from "./ui/button";
 import { ReactNode, useState } from "react";
+import { deleteOrganization } from "@/services/organizations";
 
 interface DetailsButtonProps {
   modal: ReactNode;
+  entityId: string;
 }
 
-export function DetailsButton({ modal }: DetailsButtonProps) {
+export function DetailsButton({ modal, entityId }: DetailsButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
@@ -27,17 +28,18 @@ export function DetailsButton({ modal }: DetailsButtonProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right">
           <DropdownMenuItem
-            asChild
-            className="flex gap-2 items-center justify-center"
+            onClick={() => setIsModalOpen((prev) => !prev)}
+            className="flex gap-2 items-center justify-center font-semibold"
           >
-            <Button
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center gap-2 w-full"
-              variant={"ghost"}
-            >
-              <Eye className="h-6 w-6" />
-              Visualizar
-            </Button>
+            <Eye className="h-5 w-5" />
+            Visualizar
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={async () => await deleteOrganization(entityId)}
+            className="flex gap-2 items-center justify-center text-red-400 font-semibold"
+          >
+            <Trash className="h-5 w-5" />
+            Excluir
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

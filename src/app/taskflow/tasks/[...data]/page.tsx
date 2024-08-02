@@ -35,16 +35,11 @@ export async function getTasksByUser(token: string) {
 
 export default async function Board({ params }: BoardProps) {
   const token = cookies().get("@token")?.value;
-  const [type, typeId] = params.data;
+  const [type, name, typeId] = params.data;
+
+  console.log(params);
 
   const tasks = await getTasksByUser(token!);
-
-  console.log(tasks);
-
-  console.log({
-    type,
-    typeId,
-  });
 
   const headCells = [
     {
@@ -82,7 +77,12 @@ export default async function Board({ params }: BoardProps) {
           value: format(task.createdAt, "dd/MM/yyyy"),
         },
         {
-          value: <DetailsButton modal={<TaskModal task={task} isEditing />} />,
+          value: (
+            <DetailsButton
+              entityId={task.id}
+              modal={<TaskModal task={task} isEditing />}
+            />
+          ),
         },
       ],
     } as EntityTable;
@@ -95,7 +95,7 @@ export default async function Board({ params }: BoardProps) {
       <div className="flex justify-between items-center">
         <h1 className="flex gap-2 items-center text-2xl font-bold">
           <Building className="w-7 h-7" />
-          Organização 1
+          {name}
         </h1>
         <Dialog>
           <DialogTrigger asChild>

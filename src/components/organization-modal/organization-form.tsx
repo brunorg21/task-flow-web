@@ -4,17 +4,45 @@ import { FormSchema } from "@/types/form-schema";
 
 import { z } from "zod";
 import { Form } from "../form";
+import { Organization } from "@/types/organization";
+import { createOrganization } from "@/services/organizations";
+import { format } from "date-fns";
+import { toast } from "../ui/use-toast";
 
-export function OrganizationForm() {
-  const formSchema = z.object({
-    name: z.string(),
-    creator: z.string(),
+interface OrganizationFormProps {
+  organization?: Organization;
+  isEditing?: boolean;
+}
 
-    date: z.string(),
-  });
+const organizationFormSchema = z.object({
+  name: z.string().min(5, {
+    message: "Nome da organização deve conter no mínimo 5 caracteres.",
+  }),
+});
 
-  function handleSubmitForm(data: any) {
-    console.log(data);
+type OrganizationFormSchema = z.infer<typeof organizationFormSchema>;
+
+export function OrganizationForm({
+  isEditing,
+  organization,
+}: OrganizationFormProps) {
+  async function handleSubmitForm({ name }: OrganizationFormSchema) {
+    if (!isEditing) {
+      const response = await createOrganization({
+        name,
+      });
+
+      if (response.success) {
+        toast({
+          title: "Organização criada com sucesso!",
+        });
+      } else {
+        toast({
+          title: response.message ?? "Erro ao criar organização!",
+          variant: "destructive",
+        });
+      }
+    }
   }
 
   const formInputs = [
@@ -24,22 +52,27 @@ export function OrganizationForm() {
       label: "Nome",
       placeholder: "Nome",
       size: 6,
+      defaultValue: organization?.name,
     },
     {
-      key: "creator",
-      name: "creator",
-      label: "Criador",
-      placeholder: "Criador",
-      description: "Dono da organização.",
+      key: "responsible",
+      name: "responsible",
+      label: "Responsável",
+      placeholder: "Responsável",
       size: 6,
+      defaultValue: organization?.user.username ?? "",
+      disabled: true,
     },
     {
       key: "date",
       name: "date",
       label: "Data de criação",
       placeholder: "Data de criação",
-      size: 12,
+      size: 6,
       disabled: true,
+      defaultValue: organization
+        ? format(organization.createdAt, "dd/MM/yyyy")
+        : "",
     },
   ] as FormSchema[];
 
@@ -47,7 +80,8 @@ export function OrganizationForm() {
     <Form
       handleSubmitForm={handleSubmitForm}
       inputs={formInputs}
-      formSchema={formSchema}
+      formSchema={organizationFormSchema}
+      isEditing={isEditing}
     />
   );
 }

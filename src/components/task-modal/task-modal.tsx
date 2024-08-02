@@ -48,9 +48,9 @@ export function TaskModal({ isEditing = false, task }: TaskModalProps) {
         <div className="grid grid-cols-12 gap-2">
           {isEditing ? (
             <>
-              <FileView />
-              <FileView />
-              <FileView />
+              {task?.attachment.map((attachment) => (
+                <FileView key={attachment.id} />
+              ))}
             </>
           ) : (
             ""

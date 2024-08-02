@@ -20,7 +20,9 @@ interface TableListProps {
 }
 
 export function TableList({ headCells, entities }: TableListProps) {
-  const [rows, setRows] = useState<EntityTable[]>(entities);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentData = entities.slice((currentPage - 1) * 10, currentPage * 10);
 
   return (
     <div className="border rounded-md w-full">
@@ -37,17 +39,26 @@ export function TableList({ headCells, entities }: TableListProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.contents.map((content, index) => (
-                <TableCell key={index}>{content.value}</TableCell>
-              ))}
-            </TableRow>
-          ))}
+          {currentData.map((row, index) => {
+            if (index <= 9) {
+              return (
+                <TableRow key={row.id}>
+                  {row.contents.map((content, index) => (
+                    <TableCell key={index}>{content.value}</TableCell>
+                  ))}
+                </TableRow>
+              );
+            }
+          })}
         </TableBody>
       </Table>
       <div className="w-full flex items-end justify-end p-1">
-        <TablePagination setRows={setRows} itemsPerPage={12} data={entities} />
+        <TablePagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          itemsPerPage={10}
+          data={entities}
+        />
       </div>
     </div>
   );

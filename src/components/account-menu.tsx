@@ -12,7 +12,7 @@ import { useAuth } from "@/providers/auth-provider";
 import { CircleUser, LogOut } from "lucide-react";
 
 export function AccountMenu() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <DropdownMenu>
@@ -28,7 +28,7 @@ export function AccountMenu() {
         <DropdownMenuItem className="flex gap-2">
           {user?.username}
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex gap-2">
+        <DropdownMenuItem onClick={signOut} className="flex gap-2">
           <LogOut size={15} />
           Sair
         </DropdownMenuItem>

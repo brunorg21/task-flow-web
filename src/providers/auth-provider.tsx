@@ -91,8 +91,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function signOut() {
+    destroyCookie(null, "@token", { path: "/" });
     setUser(null);
-    destroyCookie(null, "@token");
+    router.push("/sign-in");
   }
 
   return (

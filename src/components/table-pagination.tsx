@@ -8,24 +8,19 @@ import { EntityTable } from "@/types/entityTable";
 interface TablePaginationProps {
   data: any[];
   itemsPerPage: number;
-  setRows: Dispatch<SetStateAction<EntityTable[]>>;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPage: number;
 }
 
 export function TablePagination({
   data,
   itemsPerPage,
-  setRows,
+  setCurrentPage,
+  currentPage
 }: TablePaginationProps) {
-  const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  useEffect(() => {
-    const currentData = data.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-    );
-    setRows(currentData);
-  }, [currentPage]);
+
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -42,7 +37,10 @@ export function TablePagination({
   return (
     <div>
       <div className="flex gap-4 items-center">
-        <div className="text-sm">
+        <div className="flex text-sm gap-2">
+          <div>
+            <span>{data.length} itens</span>
+          </div>
           <span>{currentPage}</span> de <span>{totalPages}</span>
         </div>
         <Button
