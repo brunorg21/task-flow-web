@@ -1,29 +1,10 @@
 import { BoardCard } from "@/components/board-card";
 import { UserBoard } from "./user-board";
-import { api } from "@/lib/api";
-import { cookies } from "next/headers";
-import { Organization } from "@/types/organizaiton";
 
-async function getOrganizations(token: string) {
-  const response = await api("/organizations", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const { organizations }: { organizations: Organization[] } =
-    await response.json();
-
-  return organizations;
-}
+import { getOrganizations } from "@/services/organizations";
 
 export default async function Boards() {
-  const token = cookies().get("@token")?.value;
-
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
-  const organizations = await getOrganizations(token!);
+  const organizations = await getOrganizations();
 
   return (
     <div className="md:grid md:grid-rows-8 p-3 space-y-3">

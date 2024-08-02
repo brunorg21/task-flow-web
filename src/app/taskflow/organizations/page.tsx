@@ -2,69 +2,29 @@ import { DetailsButton } from "@/components/details-button";
 import { TableList } from "@/components/table";
 
 import { EntityTable } from "@/types/entityTable";
-import { Organization } from "@/types/organizaiton";
+import { Organization } from "@/types/organization";
 
 import { OrganizationModal } from "@/components/organization-modal/organization-modal";
 
-export default function Organizations() {
-  const orgs: Organization[] = [
-    {
-      id: "m5gr84i9",
-      createdAt: new Date(),
-      name: "Teste",
-    },
-    {
-      id: "3u1reuv4",
-      createdAt: new Date(),
-      name: "Teste 1",
-    },
-    {
-      id: "derv1ws0",
-      createdAt: new Date(),
-      name: "Teste 2",
-    },
-    {
-      id: "5kma53ae",
-      createdAt: new Date(),
-      name: "Teste 3",
-    },
-    {
-      id: "bhqecj4p",
-      createdAt: new Date(),
-      name: "Teste 4",
-    },
-    {
-      id: "bhqecj4p",
-      createdAt: new Date(),
-      name: "Teste 5",
-    },
-    {
-      id: "bhqecj4p",
-      createdAt: new Date(),
-      name: "Teste 6",
-    },
-    {
-      id: "bhqecj4p",
-      createdAt: new Date(),
-      name: "Teste 7",
-    },
-    {
-      id: "bhqecj4p",
-      createdAt: new Date(),
-      name: "Teste 8",
-    },
-    {
-      id: "bhqecj4p",
-      createdAt: new Date(),
-      name: "Teste 9",
-    },
-  ];
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import { getOrganizations } from "@/services/organizations";
+import { format } from "date-fns";
+
+export default async function Organizations() {
+  const orgs = await getOrganizations();
 
   const headCells = [
     {
       label: "Nome",
     },
-
+    {
+      label: "Responsável",
+    },
+    {
+      label: "Slug",
+    },
     {
       label: "Data de criação",
     },
@@ -80,12 +40,23 @@ export default function Organizations() {
         {
           value: org.name,
         },
-
         {
-          value: org.createdAt.toDateString(),
+          value: org.user.username,
         },
         {
-          value: <DetailsButton modal={<OrganizationModal />} />,
+          value: org.slug,
+        },
+        {
+          value: format(new Date(org.createdAt), "dd/MM/yyyy"),
+        },
+
+        {
+          value: (
+            <DetailsButton
+              entityId={org.id}
+              modal={<OrganizationModal organization={org} isEditing={true} />}
+            />
+          ),
         },
       ],
     } as EntityTable;
@@ -95,6 +66,17 @@ export default function Organizations() {
 
   return (
     <div className="overflow-hidden p-4">
+      <div className="flex justify-end items-center mb-4">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="flex items-center gap-2" variant={"default"}>
+              <PlusCircle className="w-4 h-4" />
+              Nova organização
+            </Button>
+          </DialogTrigger>
+          <OrganizationModal />
+        </Dialog>
+      </div>
       <TableList entities={rows} headCells={headCells} />
     </div>
   );
