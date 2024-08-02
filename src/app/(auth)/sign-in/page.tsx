@@ -1,10 +1,12 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import SignInForm from "./sign-in-form";
+import Link from "next/link";
 
 export default function SignIn() {
   return (
-    <div className="flex items-center justify-center h-full bg-muted">
+    <div className="flex flex-col items-center justify-center h-full bg-muted">
       <div className="flex flex-col w-[400px] p-4 space-y-4">
         <div className="text-center text-2xl font-semibold space-y-4">
           Acesse sua conta
@@ -12,6 +14,12 @@ export default function SignIn() {
         </div>
         <SignInForm />
       </div>
+      <span className="flex items-center gap-2">
+        Não possui conta?
+        <Button>
+          <Link href={"/sign-up"}>Crie agora</Link>
+        </Button>
+      </span>
     </div>
   );
 }

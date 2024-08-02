@@ -14,9 +14,9 @@ export default function SignIn() {
         <SignUpForm />
       </div>
       <span className="flex items-center gap-2">
-        Não possui conta?
+        Já possui conta?
         <Button>
-          <Link href={"/sign-in"}>Crie agora</Link>
+          <Link href={"/sign-in"}>Entrar agora</Link>
         </Button>
       </span>
     </div>

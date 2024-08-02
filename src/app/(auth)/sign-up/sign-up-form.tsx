@@ -23,7 +23,7 @@ export function SignUpForm() {
   });
 
   async function handleRegister({ email, password, username }: SignUpFormType) {
-    await api("/user", {
+    const response = await api("/user", {
       method: "POST",
 
       body: JSON.stringify({
