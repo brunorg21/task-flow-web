@@ -7,6 +7,7 @@ import {
 } from "../ui/dialog";
 
 import { OrganizationForm } from "./organization-form";
+import { InvitePopover } from "../invite/invite-popover";
 
 interface OrganizationModalProps {
   organization?: Organization;
@@ -19,18 +20,21 @@ export function OrganizationModal({
 }: OrganizationModalProps) {
   return (
     <DialogContent className="flex flex-col w-[1220px] h-[700px] overflow-auto p-6">
-      <DialogHeader className="p-2">
-        <DialogTitle className="text-xl font-bold">
-          {isEditing && organization
-            ? organization.name
-            : "Criar nova organização"}
-        </DialogTitle>
+      <DialogHeader className="flex flex-row justify-between p-2">
+        <div>
+          <DialogTitle className="text-xl font-bold">
+            {isEditing && organization
+              ? organization.name
+              : "Criar nova organização"}
+          </DialogTitle>
 
-        <DialogDescription>
-          {isEditing
-            ? "Atualize as informações da sua organização."
-            : "Preencha os campos para criar uma nova organização."}
-        </DialogDescription>
+          <DialogDescription>
+            {isEditing
+              ? "Atualize as informações da sua organização."
+              : "Preencha os campos para criar uma nova organização."}
+          </DialogDescription>
+        </div>
+        {organization && <InvitePopover organizationId={organization.id} />}
       </DialogHeader>
       <div className="flex flex-col justify-between h-full">
         <OrganizationForm organization={organization} isEditing={isEditing} />

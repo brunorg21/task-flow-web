@@ -45,8 +45,9 @@ export function OrganizationForm({
     }
   }
 
-  const formInputs = [
+  const formInputs: FormSchema[] = [
     {
+      renderType: "TEXT",
       key: "name",
       name: "name",
       label: "Nome",
@@ -55,6 +56,7 @@ export function OrganizationForm({
       defaultValue: organization?.name,
     },
     {
+      renderType: "TEXT",
       key: "responsible",
       name: "responsible",
       label: "Responsável",
@@ -64,6 +66,17 @@ export function OrganizationForm({
       disabled: true,
     },
     {
+      renderType: "TEXT",
+      key: "slug",
+      name: "slug",
+      label: "Slug",
+      placeholder: "Slug",
+      size: 6,
+      defaultValue: organization?.slug ?? "",
+      disabled: true,
+    },
+    {
+      renderType: "TEXT",
       key: "date",
       name: "date",
       label: "Data de criação",
@@ -74,7 +87,7 @@ export function OrganizationForm({
         ? format(organization.createdAt, "dd/MM/yyyy")
         : "",
     },
-  ] as FormSchema[];
+  ];
 
   return (
     <Form

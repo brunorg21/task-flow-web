@@ -5,9 +5,8 @@ import { Organization } from "@/types/organization";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
-const token = cookies().get("@token")?.value;
-
 export async function getOrganizations() {
+  const token = cookies().get("@token")?.value;
   const response = await api("/organizations", {
     method: "GET",
     headers: {
@@ -16,6 +15,7 @@ export async function getOrganizations() {
     next: {
       tags: ["organizations"],
     },
+    cache: "no-cache",
   });
 
   const { organizations }: { organizations: Organization[] } =
@@ -27,6 +27,7 @@ export async function getOrganizations() {
 export async function createOrganization({
   name,
 }: Omit<Organization, "createdAt" | "id" | "ownerId" | "slug" | "user">) {
+  const token = cookies().get("@token")?.value;
   const response = await api("/organizations", {
     method: "POST",
     headers: {
@@ -48,6 +49,7 @@ export async function createOrganization({
 }
 
 export async function deleteOrganization(orgId: string) {
+  const token = cookies().get("@token")?.value;
   const response = await api(`/organizations/${orgId}`, {
     method: "DELETE",
     headers: {

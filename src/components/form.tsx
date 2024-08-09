@@ -13,6 +13,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodObject, z } from "zod";
 import { Input } from "./ui/input";
 import { FormSchema } from "@/types/form-schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface FormProps {
   formSchema: ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
@@ -50,9 +57,27 @@ export function Form({
               render={({ field }) => (
                 <FormItem className={`col-span-${input.size}`}>
                   <FormLabel>{input.label}</FormLabel>
-                  <FormControl>
-                    <Input {...input} {...field} />
-                  </FormControl>
+                  {input.renderType === "TEXT" && (
+                    <FormControl>
+                      <Input {...input} {...field} />
+                    </FormControl>
+                  )}
+                  {input.renderType === "SELECT" && (
+                    <Select {...field}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue {...input} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {input.options?.map((option) => (
+                          <SelectItem key={option.id} value={option.value}>
+                            {option.value}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                   <FormDescription>{input.description ?? ""}</FormDescription>
                   <FormMessage />
                 </FormItem>

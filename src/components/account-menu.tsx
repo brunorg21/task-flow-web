@@ -1,4 +1,4 @@
-"use client";
+import { auth } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,11 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/providers/auth-provider";
-import { CircleUser, LogOut } from "lucide-react";
 
-export function AccountMenu() {
-  const { user, signOut } = useAuth();
+import { CircleUser, LogOut } from "lucide-react";
+import Link from "next/link";
+
+export async function AccountMenu() {
+  const { user } = await auth();
 
   return (
     <DropdownMenu>
@@ -28,9 +29,11 @@ export function AccountMenu() {
         <DropdownMenuItem className="flex gap-2">
           {user?.username}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={signOut} className="flex gap-2">
-          <LogOut size={15} />
-          Sair
+        <DropdownMenuItem asChild className="flex gap-2">
+          <Link href={"/api/auth/logout"}>
+            <LogOut size={15} />
+            Sair
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -70,7 +70,6 @@ export default function TaskLoading() {
               Nova tarefa
             </Button>
           </DialogTrigger>
-          <TaskModal />
         </Dialog>
       </div>
       <TableList entities={rows} headCells={headCells} />

@@ -59,7 +59,6 @@ export default function OrganizationLoading() {
               Nova organização
             </Button>
           </DialogTrigger>
-          <TaskModal />
         </Dialog>
       </div>
       <TableList entities={rows} headCells={headCells} />

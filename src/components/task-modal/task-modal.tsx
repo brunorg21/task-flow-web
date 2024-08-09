@@ -15,13 +15,15 @@ import { NoteDrawer } from "./note-drawer/note-drawer";
 
 import { TaskForm } from "./task-form";
 import { Task } from "@/types/task";
+import { User } from "@/types/user";
 
 interface TaskModalProps {
   isEditing?: boolean;
   task?: Task;
+  users: User[];
 }
 
-export function TaskModal({ isEditing = false, task }: TaskModalProps) {
+export function TaskModal({ isEditing = false, task, users }: TaskModalProps) {
   return (
     <DialogContent className="flex flex-col w-[1220px] h-[700px] overflow-auto p-6">
       <DialogHeader className="p-2">
@@ -44,7 +46,7 @@ export function TaskModal({ isEditing = false, task }: TaskModalProps) {
         </DialogDescription>
       </DialogHeader>
       <div className="flex flex-col justify-between h-full">
-        <TaskForm isEditing={isEditing} task={task} />
+        <TaskForm users={users} isEditing={isEditing} task={task} />
         <div className="grid grid-cols-12 gap-2">
           {isEditing ? (
             <>

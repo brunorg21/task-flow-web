@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import SignInForm from "./sign-in-form";
 import Link from "next/link";
 
@@ -16,9 +15,7 @@ export default function SignIn() {
       </div>
       <span className="flex items-center gap-2">
         Não possui conta?
-        <Button>
-          <Link href={"/sign-up"}>Crie agora</Link>
-        </Button>
+        <Link href={"/sign-up"}>Crie agora</Link>
       </span>
     </div>
   );

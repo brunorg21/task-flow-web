@@ -11,6 +11,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
+import { getUsersByOrganization } from "@/services/user-organization";
 
 interface BoardProps {
   params: {
@@ -35,11 +36,10 @@ export async function getTasksByUser(token: string) {
 
 export default async function Board({ params }: BoardProps) {
   const token = cookies().get("@token")?.value;
-  const [type, name, typeId] = params.data;
-
-  console.log(params);
+  const [_, slug, __] = params.data;
 
   const tasks = await getTasksByUser(token!);
+  const users = await getUsersByOrganization(slug);
 
   const headCells = [
     {
@@ -80,7 +80,7 @@ export default async function Board({ params }: BoardProps) {
           value: (
             <DetailsButton
               entityId={task.id}
-              modal={<TaskModal task={task} isEditing />}
+              modal={<TaskModal users={users} task={task} isEditing />}
             />
           ),
         },
@@ -95,7 +95,7 @@ export default async function Board({ params }: BoardProps) {
       <div className="flex justify-between items-center">
         <h1 className="flex gap-2 items-center text-2xl font-bold">
           <Building className="w-7 h-7" />
-          {name}
+          {slug}
         </h1>
         <Dialog>
           <DialogTrigger asChild>
@@ -104,7 +104,7 @@ export default async function Board({ params }: BoardProps) {
               Nova tarefa
             </Button>
           </DialogTrigger>
-          <TaskModal />
+          <TaskModal users={users} />
         </Dialog>
       </div>
       <TableList entities={rows} headCells={headCells} />

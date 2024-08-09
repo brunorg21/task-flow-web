@@ -6,8 +6,9 @@ import { Nav } from "./nav";
 
 import { MenuNavigation } from "./menu-navigation";
 import Image from "next/image";
+import { InviteNotificationSheet } from "./invite/invite-notification-sheet";
 
-export function Header() {
+export async function Header() {
   return (
     <div className="flex items-center justify-between space-x-4 bg-primary-foreground p-4">
       <span className="flex items-center gap-2 text-lg">
@@ -28,6 +29,7 @@ export function Header() {
         <MenuNavigation />
       </div>
 
+      <InviteNotificationSheet />
       <AccountMenu />
       <ThemeToggle />
     </div>

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { SignUpForm } from "./sign-up-form";
-import { Button } from "@/components/ui/button";
 
 export default function SignIn() {
   return (
@@ -15,9 +14,7 @@ export default function SignIn() {
       </div>
       <span className="flex items-center gap-2">
         Já possui conta?
-        <Button>
-          <Link href={"/sign-in"}>Entrar agora</Link>
-        </Button>
+        <Link href={"/sign-in"}>Entrar agora</Link>
       </span>
     </div>
   );

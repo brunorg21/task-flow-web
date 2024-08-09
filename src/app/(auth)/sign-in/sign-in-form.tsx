@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/providers/auth-provider";
+import { signInWithEmail } from "@/providers/actions";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Circle, LoaderCircle } from "lucide-react";
 import { useState } from "react";
@@ -18,8 +19,6 @@ const signInFormSchema = z.object({
 export type SignInFormType = z.infer<typeof signInFormSchema>;
 
 export default function SignInForm() {
-  const { signIn } = useAuth();
-
   const { register, handleSubmit, formState } = useForm<SignInFormType>({
     resolver: zodResolver(signInFormSchema),
   });
@@ -28,7 +27,7 @@ export default function SignInForm() {
 
   async function handleSignIn({ email, password }: SignInFormType) {
     setLoading(true);
-    await signIn({ email, password });
+    await signInWithEmail({ email, password });
     setLoading(false);
   }
   return (

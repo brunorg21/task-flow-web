@@ -2,6 +2,7 @@ import { BoardCard } from "@/components/board-card";
 import { UserBoard } from "./user-board";
 
 import { getOrganizations } from "@/services/organizations";
+import { Suspense } from "react";
 
 export default async function Boards() {
   const organizations = await getOrganizations();
@@ -10,7 +11,9 @@ export default async function Boards() {
     <div className="md:grid md:grid-rows-8 p-3 space-y-3">
       <div className="row-span-2 space-y-4">
         <h1 className="text-2xl font-bold">Suas tarefas</h1>
-        <UserBoard />
+        <Suspense fallback={"Carregando..."}>
+          <UserBoard />
+        </Suspense>
       </div>
 
       <div className="row-span-4 space-y-4">
@@ -25,7 +28,7 @@ export default async function Boards() {
               <BoardCard
                 boardId={organization.id}
                 key={organization.id}
-                boardName={organization.name}
+                boardName={organization.slug}
               />
             ))
           )}

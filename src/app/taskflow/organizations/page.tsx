@@ -66,7 +66,7 @@ export default async function Organizations() {
 
   return (
     <div className="overflow-hidden p-4">
-      <div className="flex justify-end items-center mb-4">
+      <div className="flex justify-end items-center gap-2 mb-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2" variant={"default"}>
