@@ -10,14 +10,12 @@ import {
 import { Dialog } from "./ui/dialog";
 
 import { ReactNode, useState } from "react";
-import { deleteOrganization } from "@/services/organizations";
 
 interface DetailsButtonProps {
   modal: ReactNode;
-  entityId: string;
 }
 
-export function DetailsButton({ modal, entityId }: DetailsButtonProps) {
+export function DetailsButton({ modal }: DetailsButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
@@ -33,13 +31,6 @@ export function DetailsButton({ modal, entityId }: DetailsButtonProps) {
           >
             <Eye className="h-5 w-5" />
             Visualizar
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={async () => await deleteOrganization(entityId)}
-            className="flex gap-2 items-center justify-center text-red-400 font-semibold"
-          >
-            <Trash className="h-5 w-5" />
-            Excluir
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
