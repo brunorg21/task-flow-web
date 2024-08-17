@@ -12,8 +12,6 @@ import { usePathname } from "next/navigation";
 export default function TaskLoading() {
   const pathname = usePathname();
 
-  console.log(pathname);
-
   const headCells = [
     {
       label: "Título",
