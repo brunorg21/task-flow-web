@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface Task {
   id: string;
   title: string;
@@ -5,7 +7,8 @@ export interface Task {
   createdAt: Date;
   assignedId: string | null;
   note: any[];
-  attachment: any[];
+  attachments: any[];
   userId: string;
-  assignUser: string;
+  assignUser: User | null;
+  organizationId: string | null;
 }
