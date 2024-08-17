@@ -15,7 +15,6 @@ export async function getOrganizations() {
     next: {
       tags: ["organizations"],
     },
-    cache: "no-cache",
   });
 
   const { organizations }: { organizations: Organization[] } =
