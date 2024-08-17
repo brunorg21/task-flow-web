@@ -54,34 +54,40 @@ export function Form({
               key={input.name}
               control={form.control}
               name={input.name as never}
-              render={({ field }) => (
-                <FormItem className={`col-span-${input.size}`}>
-                  <FormLabel>{input.label}</FormLabel>
-                  {input.renderType === "TEXT" && (
-                    <FormControl>
-                      <Input {...input} {...field} />
-                    </FormControl>
-                  )}
-                  {input.renderType === "SELECT" && (
-                    <Select {...field}>
+              render={({ field }) => {
+                return (
+                  <FormItem className={`col-span-${input.size}`}>
+                    <FormLabel>{input.label}</FormLabel>
+                    {input.renderType === "TEXT" && (
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue {...input} />
-                        </SelectTrigger>
+                        <Input {...input} {...field} />
                       </FormControl>
-                      <SelectContent>
-                        {input.options?.map((option) => (
-                          <SelectItem key={option.id} value={option.value}>
-                            {option.value}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                  <FormDescription>{input.description ?? ""}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+                    )}
+                    {input.renderType === "SELECT" && (
+                      <Select
+                        onValueChange={field.onChange}
+                        disabled={input.disabled}
+                        defaultValue={input.defaultValue?.toString()}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue {...input} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {input.options?.map((option) => (
+                            <SelectItem key={option.id} value={option.id}>
+                              {option.value}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    <FormDescription>{input.description ?? ""}</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           );
         })}
