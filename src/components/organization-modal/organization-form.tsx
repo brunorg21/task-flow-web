@@ -32,6 +32,8 @@ export function OrganizationForm({
         name,
       });
 
+      console.log(response);
+
       if (response.success) {
         toast({
           title: "Organização criada com sucesso!",

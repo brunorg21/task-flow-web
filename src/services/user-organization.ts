@@ -18,8 +18,6 @@ export async function getUsersByOrganization(slug: string) {
     cache: "no-cache",
   });
 
-  console.log(response);
-
   const { users }: { users: User[] } = await response.json();
 
   return users;
