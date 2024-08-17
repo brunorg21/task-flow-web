@@ -8,10 +8,10 @@ import { DetailsButton } from "@/components/details-button";
 import { TaskModal } from "@/components/task-modal/task-modal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { api } from "@/lib/api";
-import { cookies } from "next/headers";
+
 import { format } from "date-fns";
 import { getUsersByOrganization } from "@/services/user-organization";
+import { getTasks } from "@/services/tasks";
 
 interface BoardProps {
   params: {
@@ -19,26 +19,10 @@ interface BoardProps {
   };
 }
 
-export async function getTasksByUser(token: string) {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
-  const response = await api("/tasks/user", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const { tasks }: { tasks: Task[] } = await response.json();
-
-  return tasks;
-}
-
 export default async function Board({ params }: BoardProps) {
-  const token = cookies().get("@token")?.value;
-  const [_, slug, __] = params.data;
+  const [_, slug, orgId] = params.data;
 
-  const tasks = await getTasksByUser(token!);
+  const tasks = await getTasks(orgId);
   const users = await getUsersByOrganization(slug);
 
   const headCells = [
@@ -50,7 +34,7 @@ export default async function Board({ params }: BoardProps) {
       label: "Status",
     },
     {
-      label: "Responsável",
+      label: "Atribuido á",
     },
     {
       label: "Data de criação",
@@ -71,7 +55,7 @@ export default async function Board({ params }: BoardProps) {
           value: <BadgeStatus task={task} />,
         },
         {
-          value: task.assignUser ?? "N/A",
+          value: task.assignUser?.username ?? "N/A",
         },
         {
           value: format(task.createdAt, "dd/MM/yyyy"),
@@ -79,8 +63,9 @@ export default async function Board({ params }: BoardProps) {
         {
           value: (
             <DetailsButton
-              entityId={task.id}
-              modal={<TaskModal users={users} task={task} isEditing />}
+              modal={
+                <TaskModal orgId={orgId} users={users} task={task} isEditing />
+              }
             />
           ),
         },
@@ -95,7 +80,7 @@ export default async function Board({ params }: BoardProps) {
       <div className="flex justify-between items-center">
         <h1 className="flex gap-2 items-center text-2xl font-bold">
           <Building className="w-7 h-7" />
-          {slug}
+          {decodeURIComponent(slug)}
         </h1>
         <Dialog>
           <DialogTrigger asChild>
@@ -104,7 +89,7 @@ export default async function Board({ params }: BoardProps) {
               Nova tarefa
             </Button>
           </DialogTrigger>
-          <TaskModal users={users} />
+          <TaskModal orgId={orgId} users={users} />
         </Dialog>
       </div>
       <TableList entities={rows} headCells={headCells} />
