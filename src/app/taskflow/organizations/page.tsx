@@ -11,9 +11,11 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { getOrganizations } from "@/services/organizations";
 import { format } from "date-fns";
+import { auth } from "@/auth/auth";
 
 export default async function Organizations() {
   const orgs = await getOrganizations();
+  const { user } = await auth();
 
   const headCells = [
     {
@@ -53,8 +55,13 @@ export default async function Organizations() {
         {
           value: (
             <DetailsButton
-              entityId={org.id}
-              modal={<OrganizationModal organization={org} isEditing={true} />}
+              modal={
+                <OrganizationModal
+                  user={user}
+                  organization={org}
+                  isEditing={true}
+                />
+              }
             />
           ),
         },
