@@ -13,6 +13,9 @@ interface SendInviteRequest {
 interface AcceptInviteRequest {
   inviteId: string;
 }
+interface CancelInviteRequest {
+  inviteId: string;
+}
 
 export async function getReceivedInvites() {
   const token = cookies().get("@token")?.value;
@@ -51,8 +54,6 @@ export async function sendInvite({ email, organizationId }: SendInviteRequest) {
 
   const { message } = await response.json();
 
-  console.log(message);
-
   return { success: !!response.ok, message };
 }
 
@@ -72,7 +73,25 @@ export async function acceptInvite({ inviteId }: AcceptInviteRequest) {
     revalidateTag("invites");
   }
 
-  const { message } = await response.json();
+  return { success: !!response.ok };
+}
+export async function cancelInvite({ inviteId }: CancelInviteRequest) {
+  const token = cookies().get("@token")?.value;
+  const response = await api(`/invites/cancel/${inviteId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    next: {
+      tags: ["invites"],
+    },
+  });
 
-  return { success: !!response.ok, message };
+  if (response.ok) {
+    revalidateTag("invites");
+    return { success: true };
+  } else {
+    const { message } = await response.json();
+    return { success: !!response.ok, message };
+  }
 }

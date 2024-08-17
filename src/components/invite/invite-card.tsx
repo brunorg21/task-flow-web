@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Invite } from "@/types/invites";
 import { format } from "date-fns";
 import { CheckCircle, Loader, Loader2 } from "lucide-react";
-import { acceptInvite } from "@/services/invites";
+import { acceptInvite, cancelInvite } from "@/services/invites";
 import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "../ui/use-toast";
 
 interface InviteCardProps {
   invite: Invite;
@@ -23,7 +24,22 @@ export default function InviteCard({ invite }: InviteCardProps) {
       inviteId: invite.id,
     });
 
-    console.log(response);
+    if (response.success) {
+      toast({
+        title: "Convite aceito!",
+      });
+    }
+  }
+
+  async function handleCancelInvite() {
+    const { success, message } = await cancelInvite({ inviteId: invite.id });
+
+    if (!success) {
+      toast({
+        title: message,
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -63,30 +79,35 @@ export default function InviteCard({ invite }: InviteCardProps) {
               </span>
             </span>
           </div>
-          <form
-            onSubmit={handleSubmit(handleAcceptInvite)}
-            className="flex items-center gap-2"
-          >
-            <Button
-              disabled={isSubmitting || invite.invitationAccepted}
-              type="submit"
-              size={"sm"}
-              variant={"outline"}
+          <div className="flex items-center gap-2">
+            <form
+              onSubmit={handleSubmit(handleAcceptInvite)}
+              className="flex items-center gap-2"
             >
-              {isSubmitting ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                "Aceitar"
-              )}
-            </Button>
-            <Button
-              disabled={invite.invitationAccepted}
-              size={"sm"}
-              variant={"destructive"}
-            >
-              Recusar
-            </Button>
-          </form>
+              <Button
+                disabled={isSubmitting || invite.invitationAccepted}
+                type="submit"
+                size={"sm"}
+                variant={"outline"}
+              >
+                {isSubmitting ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  "Aceitar"
+                )}
+              </Button>
+            </form>
+            <form action="">
+              <Button
+                formAction={async () => await handleCancelInvite()}
+                disabled={invite.invitationAccepted}
+                size={"sm"}
+                variant={"destructive"}
+              >
+                Recusar
+              </Button>
+            </form>
+          </div>
         </div>
       </Card>
     </div>

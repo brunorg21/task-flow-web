@@ -20,7 +20,7 @@ export async function InviteNotificationSheet() {
       <SheetTrigger asChild>
         <Button className="relative" size={"icon"} variant="ghost">
           <span className="absolute flex justify-center items-center text-sm font-medium bottom-6 right-5 bg-secondary-foreground text-muted w-5 p-1 h-5 rounded-full">
-            {invites.length}
+            {invites.filter((invite) => !invite.invitationAccepted).length}
           </span>
           <BellIcon className="size-5" />
         </Button>
