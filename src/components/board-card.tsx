@@ -24,7 +24,7 @@ export function BoardCard({
       className="col-span-2"
       href={`/taskflow/tasks/${userBoard ? "user" : "org"}/${
         userBoard ? boardName : boardName
-      }/${!userBoard ? `?id=${boardId}` : ""}`}
+      }/${!userBoard ? `${boardId}` : ""}`}
     >
       <Card className="bg-primary-foreground md:hover:scale-105 hover:scale-[102%] duration-150">
         <CardHeader>
