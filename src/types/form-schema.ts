@@ -1,11 +1,14 @@
 import { ComponentProps } from "react";
+import { Attachment } from "./attachment";
 
 export type BaseFormSchema = ComponentProps<"input"> & {
+  key: string;
+  name: string;
   size: number;
   label: string;
   description?: string;
   hidden?: boolean;
-  renderType: "SELECT" | "TEXT";
+  renderType: "SELECT" | "TEXT" | "UPLOAD";
 };
 
 export type SelectFormSchema = BaseFormSchema & {
@@ -17,4 +20,9 @@ export type TextFormSchema = BaseFormSchema & {
   renderType: "TEXT";
 };
 
-export type FormSchema = SelectFormSchema | TextFormSchema;
+export type UploadFormSchema = BaseFormSchema & {
+  renderType: "UPLOAD";
+  defaultAttachments: Attachment[];
+};
+
+export type FormSchema = SelectFormSchema | TextFormSchema | UploadFormSchema;
