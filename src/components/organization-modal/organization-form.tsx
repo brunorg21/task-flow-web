@@ -5,7 +5,10 @@ import { FormSchema } from "@/types/form-schema";
 import { z } from "zod";
 import { Form } from "../form";
 import { Organization } from "@/types/organization";
-import { createOrganization } from "@/services/organizations";
+import {
+  createOrganization,
+  updateOrganization,
+} from "@/services/organizations";
 import { format } from "date-fns";
 import { toast } from "../ui/use-toast";
 
@@ -15,9 +18,13 @@ interface OrganizationFormProps {
 }
 
 const organizationFormSchema = z.object({
-  name: z.string().min(5, {
-    message: "Nome da organização deve conter no mínimo 5 caracteres.",
-  }),
+  name: z
+    .string({
+      message: "Insira um nome para a organização.",
+    })
+    .min(5, {
+      message: "Nome da organização deve conter no mínimo 5 caracteres.",
+    }),
 });
 
 type OrganizationFormSchema = z.infer<typeof organizationFormSchema>;
@@ -32,15 +39,29 @@ export function OrganizationForm({
         name,
       });
 
-      console.log(response);
-
       if (response.success) {
         toast({
-          title: "Organização criada com sucesso!",
+          title: response.message,
         });
       } else {
         toast({
           title: response.message ?? "Erro ao criar organização!",
+          variant: "destructive",
+        });
+      }
+    } else if (!!organization) {
+      const response = await updateOrganization({
+        name,
+        id: organization.id,
+      });
+
+      if (response.success) {
+        toast({
+          title: "Organização atualizada com sucesso!",
+        });
+      } else {
+        toast({
+          title: response.message ?? "Erro ao atualizar organização!",
           variant: "destructive",
         });
       }
