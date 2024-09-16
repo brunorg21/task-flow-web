@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import { FileView } from "../file-view";
+import { FileView } from "../file-view/file-view";
 import { Button } from "../ui/button";
 
 import { Sheet, SheetTrigger } from "../ui/sheet";
@@ -17,6 +17,7 @@ import { TaskForm } from "./task-form";
 import { Task } from "@/types/task";
 import { User } from "@/types/user";
 import { deleteTask } from "@/services/tasks";
+import { toast } from "../ui/use-toast";
 
 interface TaskModalProps {
   isEditing?: boolean;
@@ -42,7 +43,15 @@ export function TaskModal({
             {task && (
               <form action="">
                 <Button
-                  formAction={async () => await deleteTask(task.id)}
+                  formAction={async () => {
+                    const { success } = await deleteTask(task.id);
+
+                    if (success) {
+                      toast({
+                        title: "Tarefa excluída com sucesso!",
+                      });
+                    }
+                  }}
                   title="Excluir tarefa"
                   variant={"destructive"}
                   size={"icon"}
@@ -51,14 +60,15 @@ export function TaskModal({
                 </Button>
               </form>
             )}
+
             <Sheet>
               <SheetTrigger asChild>
                 <Button size={"sm"} className="flex items-center gap-1">
                   <NotepadText />
-                  Notas
+                  Anotações
                 </Button>
               </SheetTrigger>
-              <NoteDrawer />
+              <NoteDrawer taskId={task?.id ?? ""} />
             </Sheet>
           </div>
         </div>
@@ -75,17 +85,6 @@ export function TaskModal({
           isEditing={isEditing}
           task={task}
         />
-        <div className="grid grid-cols-12 gap-2">
-          {isEditing ? (
-            <>
-              {task?.attachments.map((attachment) => (
-                <FileView key={attachment.id} />
-              ))}
-            </>
-          ) : (
-            ""
-          )}
-        </div>
       </div>
     </DialogContent>
   );
