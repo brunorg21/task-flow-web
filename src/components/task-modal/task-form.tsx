@@ -5,7 +5,7 @@ import { Form } from "../form";
 import { z } from "zod";
 import { Task } from "@/types/task";
 import { User } from "@/types/user";
-import { createTask } from "@/services/tasks";
+import { createTask, updateTask } from "@/services/tasks";
 import { toast } from "../ui/use-toast";
 
 interface TaskFormProps {
@@ -15,18 +15,36 @@ interface TaskFormProps {
   orgId?: string;
 }
 
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
 const taskFormSchema = z.object({
   title: z.string(),
   responsibleId: z
     .string({
       message: "Insira um responsável pela tarefa.",
     })
-    .nullish(),
+    .nullable(),
   statusId: z
     .enum(["1", "2", "3"], {
       message: "Insira um status válido.",
     })
     .default("1"),
+  attachments: z
+    .array(
+      z.object({
+        id: z.string(),
+        type: z.string(),
+      })
+    )
+    .refine((file) =>
+      file.map(
+        (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+        "Somente formatos .jpg, .jpeg e .png são suportados."
+      )
+    )
+    .refine((files) => files?.length <= 3, "Número de anexos atingido. Máx.: 3")
+    .default([]),
 });
 
 type TaskFormSchema = z.infer<typeof taskFormSchema>;
@@ -41,8 +59,8 @@ export function TaskForm({ task, isEditing, users, orgId }: TaskFormProps) {
   async function handleSubmitForm(data: TaskFormSchema) {
     if (!isEditing) {
       const response = await createTask({
-        assignedId: data.responsibleId ?? null,
-        attachments: [],
+        assignedId: data.responsibleId === "" ? null : data.responsibleId,
+        attachments: data.attachments.map((attachment) => attachment.id) ?? [],
         organizationId: orgId ?? null,
         title: data.title,
         status: "Em andamento",
@@ -55,6 +73,28 @@ export function TaskForm({ task, isEditing, users, orgId }: TaskFormProps) {
       } else {
         toast({
           title: response.message ?? "Erro ao criar tarefa!",
+          variant: "destructive",
+        });
+      }
+    } else if (isEditing && task) {
+      const response = await updateTask({
+        assignedId: data.responsibleId === "" ? null : data.responsibleId,
+        attachments: data.attachments.map((attachment) => attachment.id) ?? [],
+        title: data.title,
+        status:
+          (statusOptions.find((item) => item.id === data.statusId)?.value as
+            | "Em andamento"
+            | "Concluída"
+            | "Cancelada") ?? "Em andamento",
+        id: task.id,
+      });
+      if (response.success) {
+        toast({
+          title: "Tarefa atualizada com sucesso!",
+        });
+      } else {
+        toast({
+          title: response.message ?? "Erro ao atualizar tarefa!",
           variant: "destructive",
         });
       }
@@ -92,7 +132,8 @@ export function TaskForm({ task, isEditing, users, orgId }: TaskFormProps) {
       placeholder: "Status",
       size: 6,
       defaultValue:
-        statusOptions.find((status) => status.value === task?.status)?.id ?? "",
+        statusOptions.find((status) => status.value === task?.status)?.id ??
+        "1",
       options: statusOptions,
       disabled: !isEditing,
     },
@@ -106,6 +147,15 @@ export function TaskForm({ task, isEditing, users, orgId }: TaskFormProps) {
       disabled: true,
       defaultValue: task?.createdAt.toString() ?? "",
       hidden: !isEditing,
+    },
+    {
+      renderType: "UPLOAD",
+      key: "attachments",
+      type: "file",
+      name: "attachments",
+      label: "Anexos",
+      size: 6,
+      defaultAttachments: task?.attachments ?? [],
     },
   ];
 

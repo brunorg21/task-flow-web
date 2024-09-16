@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { UploadButton } from "./upload-button";
 
 interface FormProps {
   formSchema: ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
@@ -34,8 +35,13 @@ export function Form({
   inputs,
   isEditing,
 }: FormProps) {
+  const defaultValues = inputs.reduce((acc: Record<string, any>, input) => {
+    acc[input.name] = input.defaultValue;
+    return acc;
+  }, {});
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues,
   });
 
   return (
@@ -82,6 +88,17 @@ export function Form({
                           ))}
                         </SelectContent>
                       </Select>
+                    )}
+                    {input.renderType === "UPLOAD" && (
+                      <FormControl {...field}>
+                        <UploadButton
+                          onChange={(attachments) =>
+                            field.onChange(attachments)
+                          }
+                          name={input.name}
+                          defaultAttachments={input.defaultAttachments}
+                        />
+                      </FormControl>
                     )}
                     <FormDescription>{input.description ?? ""}</FormDescription>
                     <FormMessage />
