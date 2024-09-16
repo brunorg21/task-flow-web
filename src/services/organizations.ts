@@ -47,6 +47,35 @@ export async function createOrganization({
   return { success: !!response.ok, message };
 }
 
+export async function updateOrganization({
+  name,
+  id,
+}: Omit<Organization, "createdAt" | "ownerId" | "user" | "slug">) {
+  const token = cookies().get("@token")?.value;
+  const response = await api(`/organizations/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+    }),
+  });
+
+  if (response.ok) {
+    revalidateTag("organizations");
+    return {
+      success: !!response.ok,
+      message: "Organização atualizada com sucesso!",
+    };
+  }
+
+  const { message } = await response.json();
+
+  return { success: !!response.ok, message };
+}
+
 export async function deleteOrganization(orgId: string) {
   const token = cookies().get("@token")?.value;
   const response = await api(`/organizations/${orgId}`, {

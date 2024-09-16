@@ -103,3 +103,42 @@ export async function deleteTask(taskId: string) {
 
   return { success: true };
 }
+
+export async function updateTask({
+  assignedId,
+  attachments,
+  status,
+  title,
+  id,
+}: Omit<
+  Task,
+  "createdAt" | "assignUser" | "note" | "organizationId" | "userId"
+>) {
+  const token = cookies().get("@token")?.value;
+  const response = await api(`/tasks/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      assignedId,
+      attachments,
+      status,
+      title,
+    }),
+  });
+
+  if (response.ok) {
+    revalidateTag("tasks");
+    revalidateTag("tasks-by-user");
+    return {
+      success: !!response.ok,
+      message: "Tarefa atualizada com sucesso!",
+    };
+  }
+
+  const { message } = await response.json();
+
+  return { success: !!response.ok, message };
+}
